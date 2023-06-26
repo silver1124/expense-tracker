@@ -1,0 +1,68 @@
+<html>
+    <body>
+        <form onsubmit="abc(event)">
+            <lable>Expense Amount</lable>
+            <input type = "number" name = "number" id = 'numberinput' />
+            <lable>Description</lable>
+            <input type = "text" name = "description" id = "desinput" />
+            <label>Catagory</label>
+            <select name="Cars" id="carnput">
+            <option value="volvo">Volvo</option>
+            <option value="bmw">bmw</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+            </select>
+            <button>Submit</button>
+        </form>
+        <ul id = 'listofitems'></ul>
+        <script>
+            window.addEventListener('load', () => {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const obj = JSON.parse(localStorage.getItem(key));
+                    show(obj);
+                }
+            });
+            function abc(event){
+            event.preventDefault();
+
+            const amount = event.target.number.value;
+            const des = event.target.description.value;
+            const car = event.target.Cars.value;
+            const obj = {amount, des, car}
+
+            localStorage.setItem(obj.car, JSON.stringify(obj)); 
+            const div = document.getElementById("data");
+            show(obj)            
+            }
+            function show(obj){
+                const parentele = document.getElementById("listofitems");
+                const childele = document.createElement("li")
+                childele.textContent = obj.amount + " - " + obj.des + " - " + obj.car 
+                
+                const editbtn = document.createElement("input")
+                editbtn.type = "button"
+                editbtn.value = "Edit"
+                editbtn.onclick = () =>{
+                    localStorage.removeItem(obj.car)
+                    parentele.removeChild(childele)
+                    document.getElementById("numberinput").value = obj.amount
+                    document.getElementById("desinput").value = obj.des
+                    document.getElementById("carsinput").value = obj.car
+                }
+
+                const deletebtn = document.createElement("input")
+                deletebtn.type = "button"
+                deletebtn.value ="Delete"
+                deletebtn.onclick = () =>{
+                    localStorage.removeItem(obj.car)
+                    parentele.removeChild(childele)
+                }
+                childele.appendChild(editbtn)
+                childele.appendChild(deletebtn)
+                parentele.appendChild(childele)
+            }
+
+        </script> 
+    </body>
+</html>
